@@ -1,49 +1,48 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+
+const getWeekDay = (day) => {
+  let weekday = [
+    "Sunday",
+    "Monday",
+    "Tueday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return weekday[day];
+};
+
+const getDate = (date) => {
+  const month = date.toLocaleString("default", { month: "long" });
+  const day = date.getDate();
+  const year = date.getFullYear();
+  return `${month} ${day}, ${year}`;
+};
+
+const getTime = (date) => {
+  const time = date.toLocaleTimeString();
+  return time;
+};
 
 const Clock = () => {
-  const today = new Date();
-  const [seconds, setSeconds] = useState(today.getSeconds());
-  const [minutes, setMinutes] = useState(today.getMinutes());
-  const [hour, setHour] = useState(today.getHours());
+  const [date, setDate] = useState(new Date());
 
   useEffect(() => {
-    const today = new Date();
-
-    const interval = setInterval(() => {
-      setSeconds(today.getSeconds());
+    let interval = setInterval(() => {
+      const today = new Date();
+      setDate(today);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [seconds]);
-
-  useEffect(() => {
-    const today = new Date();
-
-    const interval = setInterval(() => {
-      setMinutes(today.getMinutes());
-    }, 60000);
-
-    return () => clearInterval(interval);
-  }, [minutes]);
-
-  useEffect(() => {
-    const today = new Date();
-
-    const interval = setInterval(() => {
-      setHour(today.getHours());
-    }, 24 * 60000);
-
-    return () => clearInterval(interval);
-  }, [hour]);
+  }, []);
 
   return (
     <div className="h-screen text-4xl bg-secondary text-tertiary flex justify-center items-center">
-      <div className="flex gap-8 bg-primary p-16 rounded-lg">
-        <div className="text-8xl">{String(hour).padStart(2, "0")} :</div>
-        <div className="text-8xl">{String(minutes).padStart(2, "0")} :</div>
-        <div className="text-8xl">{String(seconds).padStart(2, "0")}</div>
-        <div className="text-8xl">{hour > 12 ? "PM" : "AM"}</div>
+      <div className="flex gap-4 bg-primary p-16 rounded-lg">
+        <div className="text-4xl">{getWeekDay(date)} </div>
+        <div className="text-4xl">{getDate(date)}</div>
+        <div className="text-4xl">{getTime(date)}</div>
       </div>
     </div>
   );
